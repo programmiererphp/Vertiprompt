@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VertiPrompt - Lean Slice Generator</title>
+    <meta name="description" content="An AI-powered tool to break down project ideas into lean, implementable feature slices.">
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="app.js" defer></script>
+</head>
+<body>
+
+    <div id="toast-container"></div>
+
+    <header>
+        <div class="logo">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 18.5V5.5C4 4.94772 4.44772 4.5 5 4.5H13.5V11.5H19V18.5C19 19.0523 18.5523 19.5 18 19.5H5C4.44772 19.5 4 19.0523 4 18.5Z" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M13.5 4.5L19 11.5H13.5V4.5Z" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            <h1>VertiPrompt</h1>
+        </div>
+        <p class="tagline">Deconstruct project ideas into actionable vertical slices.</p>
+    </header>
+
+    <main>
+        <section class="config-section" aria-labelledby="config-heading">
+            <h2 id="config-heading" class="sr-only">Configuration</h2>
+            <div class="input-group">
+                <label for="api-key">OpenRouter API Key</label>
+                <input type="password" id="api-key" placeholder="sk-or-..." autocomplete="off">
+                <small>Your key is stored only in your browser's localStorage.</small>
+            </div>
+        </section>
+
+        <form id="prompt-form">
+            <div class="input-group">
+                <label for="description">Portal Description</label>
+                <textarea id="description" name="description" rows="15" placeholder="Describe your web portal or application here. What is its goal? Who are the users? What are the core features? E.g., 'A web app for tracking personal book reading habits...'" required minlength="50"></textarea>
+                <small>Minimum 50 characters. The more detail, the better the slices.</small>
+            </div>
+
+            <div class="controls-row">
+                <div class="input-group">
+                    <label for="model-select">AI Model</label>
+                    <select id="model-select" name="model"></select>
+                </div>
+                 <div class="input-group">
+                    <label for="iterations-select">Iterations</label>
+                    <select id="iterations-select" name="iterations">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3" selected>3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                <button type="submit" id="generate-btn">
+                    <span class="btn-text">Generate Slices</span>
+                    <div class="spinner" style="display: none;"></div>
+                </button>
+            </div>
+        </form>
+        
+        <section id="results-section" aria-live="polite">
+            <div class="results-header" style="display: none;">
+                <h2>Generated Slices</h2>
+                <div class="toolbar">
+                    <button id="copy-all-btn" title="Copy all slices as Markdown">Copy All</button>
+                    <button id="download-md-btn" title="Download all slices as a .md file">Download MD</button>
+                    <button id="export-json-btn" title="Export slices and description as a .json file">Export JSON</button>
+                    <input type="file" id="import-json-input" accept=".json" style="display: none;">
+                    <button id="import-json-btn" title="Import from a .json file">Import JSON</button>
+                </div>
+            </div>
+            <div id="results-accordion"></div>
+             <div id="cost-tracker" class="cost-tracker" style="display: none;"></div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Created with plain HTML, CSS, and JS. Runs entirely in your browser.</p>
+    </footer>
+
+</body>
+</html>
