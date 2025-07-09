@@ -1,43 +1,13 @@
 import { fetchModels, callOpenRouter } from './openrouter.js';
-
-// --- CONSTANTS ---
-const SYSTEM_PROMPT = `
-You are *Slice-Synthesiser*, an expert-level software architect agent. Your sole job is to break down complex software ideas into a series of lean, verifiable, and robust feature slices.
-
-You MUST follow these rules precisely:
-1.  **JSON ONLY**: Your entire response MUST be a single, valid JSON object. Do not include any text, notes, or markdown fences before or after the JSON.
-2.  **JSON SCHEMA**: The JSON object must match this exact schema:
-    \`\`\`json
-    {
-      "slices": [
-        {
-          "title": "A short, descriptive, verb-noun title for the slice",
-          "prompt": "The full, formatted prompt for the slice..."
-        }
-      ]
-    }
-    \`\`\`
-3.  **MANDATORY DEBUG SLICE (Slice 1)**: For ANY new project, the very first slice (Slice 1) MUST be for creating a comprehensive debug log. This is non-negotiable. Use the following prompt content for this first slice, filling in the [AppName]:
-    "# Goal\\nCreate a collapsible debug log component to aid development and troubleshooting.\\n\\n# UI / UX\\n- A <details> element at the bottom of the page, initially closed, with a <summary> of 'Debug Log'.\\n- A 'Copy Log' button inside the summary.\\n- A <pre> block inside to display log content.\\n\\n# Function\\n- Create a global log(message, data) function.\\n- It should timestamp entries and pretty-print JSON data.\\n- It should log: all function calls with params/returns, all API calls, all user button presses, and all errors.\\n- The 'Copy Log' button copies the <pre> content to the clipboard.\\n\\n# Files\\nindex.html, style.css, app.js, logger.js\\n\\n# Tests\\n- Open app -> click a button -> see the event in the log -> click 'Copy Log' -> paste and verify content.\\n\\n# Acceptance\\n- The debug log is present on the page and correctly logs user interactions and function calls."
-
-4.  **PROJECT OVERVIEW (In Slice 2)**: The second slice you generate (the first *application-specific* slice) must begin its '# Goal' section with a brief, one-sentence overview of the entire project before stating the slice's specific goal. Example: "# Goal\\nProject Overview: To build a client-side illustrated book generator. This slice focuses on implementing the file upload interface."
-
-5.  **INCREMENTAL INSTRUCTIONS (Slice 3+)**: For every subsequent slice (Slice 3 and onwards), the '# Goal' section MUST begin with the phrase "Extend the '[AppName]' by...". This ensures a clear, evolutionary path.
-`;
-
-const CURATED_MODELS = [
-    { id: 'openai/gpt-4o', name: 'OpenAI: GPT-4o (Recommended)', pricing: { prompt: 5.0, completion: 15.0 } },
-    { id: 'anthropic/claude-3-opus', name: 'Anthropic: Claude 3 Opus', pricing: { prompt: 15.0, completion: 75.0 } },
-    { id: 'google/gemini-1.5-pro-latest', name: 'Google: Gemini 1.5 Pro', pricing: { prompt: 3.5, completion: 10.5 } },
-    { id: 'perplexity/pplx-70b-online', name: 'Perplexity: PPLX 70B Online', pricing: { prompt: 1.0, completion: 1.0 } },
-    { id: 'mistralai/mistral-large-latest', name: 'Mistral: Large', pricing: { prompt: 8.0, completion: 24.0 } },
-    { id: 'meta-llama/llama-3-70b-instruct', name: 'Meta: Llama 3 70B Instruct', pricing: { prompt: 0.79, completion: 1.05 } },
-    { id: 'deepseek/deepseek-chat', name: 'DeepSeek: Chat', pricing: { prompt: 0.14, completion: 0.28 } },
-];
-const DEFAULT_MODEL = CURATED_MODELS[0].id;
-const FALLBACK_MODEL = "openrouter/auto";
-const LOCAL_STORAGE_KEY = "vertiprompt.last";
-const API_KEY_STORAGE_KEY = "vertiprompt.apikey";
+// Import all prompts and configurations from the new external file.
+import { 
+    SYSTEM_PROMPT, 
+    CURATED_MODELS, 
+    DEFAULT_MODEL, 
+    FALLBACK_MODEL,
+    LOCAL_STORAGE_KEY,
+    API_KEY_STORAGE_KEY
+} from './prompts-config.js';
 
 // --- DOM ELEMENTS ---
 const elements = {
@@ -72,7 +42,7 @@ let state = {
     model: DEFAULT_MODEL,
     apiKey: '',
     isGenerating: false,
-    models: CURATED_MODELS,
+    models: CURATED_MODELS, // Use the curated list from config
 };
 
 // --- DEBUG LOGGER ---
