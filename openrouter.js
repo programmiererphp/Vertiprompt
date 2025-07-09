@@ -26,9 +26,10 @@ export async function fetchModels() {
  * @param {Array} options.messages - The array of message objects.
  * @param {number} options.max_tokens - The maximum number of tokens to generate.
  * @param {number} options.temperature - The sampling temperature.
+ * @param {object} [options.response_format] - Optional response format object (e.g., { type: "json_object" }).
  * @returns {Promise<object>} A promise that resolves to the API response data.
  */
-export async function callOpenRouter({ apiKey, model, messages, max_tokens, temperature }) {
+export async function callOpenRouter({ apiKey, model, messages, max_tokens, temperature, response_format }) {
   if (!apiKey) {
     throw new Error("OpenRouter API key is missing.");
   }
@@ -40,12 +41,19 @@ export async function callOpenRouter({ apiKey, model, messages, max_tokens, temp
     "X-Title": "VertiPrompt"
   };
   
-  const body = JSON.stringify({
+  const bodyPayload = {
     model,
     messages,
     max_tokens,
     temperature,
-  });
+  };
+  
+  // Add response_format only if it's provided
+  if (response_format) {
+    bodyPayload.response_format = response_format;
+  }
+  
+  const body = JSON.stringify(bodyPayload);
   
   const response = await fetch(`${API_BASE_URL}/chat/completions`, {
     method: 'POST',

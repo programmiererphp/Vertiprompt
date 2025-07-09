@@ -8,6 +8,7 @@
     --primary-text-color: #ffffff;
     --success-color: #28a745;
     --error-color: #dc3545;
+    --warning-color: #ffc107;
     --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --border-radius: 8px;
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
@@ -178,7 +179,7 @@ button:active { transform: scale(0.98); }
     padding-bottom: 0.5rem;
 }
 .results-header h2 { margin: 0; }
-.toolbar { display: flex; gap: 0.5rem; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .toolbar button {
     background-color: var(--bg-alt-color);
     color: var(--fg-color);
@@ -187,6 +188,15 @@ button:active { transform: scale(0.98); }
     font-size: 0.9rem;
 }
 .toolbar button:hover { background-color: color-mix(in srgb, var(--bg-alt-color) 85%, #fff); }
+
+#clean-slices-btn {
+    border-color: var(--warning-color);
+    color: var(--warning-color);
+}
+#clean-slices-btn:hover {
+    background-color: var(--warning-color);
+    color: black;
+}
 
 #results-accordion {
     display: flex;
@@ -237,7 +247,7 @@ button:active { transform: scale(0.98); }
     border: 1px solid var(--border-color);
 }
 .accordion-item[open] .accordion-content {
-    max-height: 1000px; /* Adjust as needed */
+    max-height: 1000px;
     padding-bottom: 0.5rem;
 }
 .slice-actions {
@@ -287,6 +297,53 @@ button:active { transform: scale(0.98); }
 .toast.info { background-color: var(--primary-color); }
 .toast.success { background-color: var(--success-color); }
 .toast.error { background-color: var(--error-color); }
+
+/* Debug Section */
+.debug-section {
+    margin-top: 2.5rem;
+    background-color: var(--bg-alt-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+}
+.debug-section summary {
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style-position: inside;
+}
+.debug-section summary::marker, .debug-section summary::-webkit-details-marker {
+    color: var(--primary-color);
+}
+#debug-log-content {
+    max-height: 400px;
+    overflow-y: auto;
+    background-color: var(--bg-color);
+    padding: 1rem;
+    margin: 0 1rem 1rem;
+    border-radius: var(--border-radius);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: "SF Mono", "Fira Code", monospace;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: #ccc;
+    border: 1px solid var(--border-color);
+}
+#copy-log-btn {
+    background-color: var(--bg-color);
+    color: var(--fg-color);
+    border: 1px solid var(--border-color);
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: normal;
+}
+#copy-log-btn:hover {
+     background-color: color-mix(in srgb, var(--bg-color) 85%, #fff);
+}
+
 
 /* Responsive */
 @media (max-width: 600px) {

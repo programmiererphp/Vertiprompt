@@ -71,10 +71,22 @@
                     <button id="export-json-btn" title="Export slices and description as a .json file">Export JSON</button>
                     <input type="file" id="import-json-input" accept=".json" style="display: none;">
                     <button id="import-json-btn" title="Import from a .json file">Import JSON</button>
+                    <button id="clean-slices-btn" title="Clear all generated slices">Clean</button>
                 </div>
             </div>
             <div id="results-accordion"></div>
              <div id="cost-tracker" class="cost-tracker" style="display: none;"></div>
+        </section>
+
+        <!-- DEBUG LOG SECTION -->
+        <section class="debug-section">
+            <details>
+                <summary>
+                    <span>Debug Log</span>
+                    <button id="copy-log-btn" title="Copy Debug Log">Copy Log</button>
+                </summary>
+                <pre id="debug-log-content">Logger initialized. Waiting for actions...</pre>
+            </details>
         </section>
 
     </main>
